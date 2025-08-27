@@ -1,0 +1,42 @@
+.container {
+  padding: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.content {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.poster {
+  max-width: 300px;
+  width: 100%;
+  border-radius: 6px;
+}
+
+.details {
+  flex: 1;
+  min-width: 250px;
+}
+
+.details p {
+  margin: 0.5rem 0;
+}
+
+.backLink {
+  display: inline-block;
+  margin-top: 1.5rem;
+  text-decoration: none;
+  color: #007bff;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: red;
+}
