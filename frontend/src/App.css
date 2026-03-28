@@ -1,0 +1,22 @@
+/* Global mouse-following glow orb */
+.mouse-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    circle,
+    rgba(232, 168, 56, 0.06) 0%,
+    rgba(232, 168, 56, 0.03) 25%,
+    rgba(124, 106, 239, 0.02) 50%,
+    transparent 70%
+  );
+  filter: blur(40px);
+  will-change: transform;
+  mix-blend-mode: screen;
+  transition: opacity 0.3s ease;
+}

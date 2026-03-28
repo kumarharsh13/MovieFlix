@@ -11,13 +11,16 @@ const SearchBar = ({ searchTerm, setSearchTerm }) => {
 
   return (
     <div className={styles.searchBar}>
-      <input
-        type="text"
-        placeholder="Search for a movie..."
-        value={searchTerm || ''}
-        onChange={handleChange}
-        aria-label="Search movies"
-      />
+      <div className={styles.searchWrapper}>
+        <span className={styles.searchIcon}>&#9906;</span>
+        <input
+          type="text"
+          placeholder="Search movies, directors, actors..."
+          value={searchTerm || ''}
+          onChange={handleChange}
+          aria-label="Search movies"
+        />
+      </div>
     </div>
   );
 };

@@ -11,6 +11,7 @@ import {
   PointElement,
   LineElement,
   Title,
+  Filler,
 } from "chart.js";
 import { getMovieStats } from "../../apis/movieApis";
 
@@ -25,8 +26,13 @@ Chart.register(
   BarElement,
   PointElement,
   LineElement,
-  Title
+  Title,
+  Filler
 );
+
+// Dark theme defaults
+Chart.defaults.color = "#9a95a8";
+Chart.defaults.borderColor = "rgba(255,255,255,0.05)";
 
 const StatsDashboard = () => {
   const [stats, setStats] = useState(null);
@@ -43,9 +49,7 @@ const StatsDashboard = () => {
       }
       setStats(res.data);
     } catch (err) {
-      // Check for common errors
       if (err.response) {
-        // Server responded with an error status
         if (err.response.status === 401 || err.response.status === 403) {
           setError(
             "Unauthorized access. Only admins can view the stats. Please login with appropriate credentials."
@@ -57,12 +61,10 @@ const StatsDashboard = () => {
           );
         }
       } else if (err.request) {
-        // Request made but no response received
         setError(
           "Network error: Unable to connect to the server. Please check your connection."
         );
       } else {
-        // Other errors
         setError(err.message || "Failed to load stats.");
       }
       setStats(null);
@@ -75,30 +77,33 @@ const StatsDashboard = () => {
     fetchStats();
   }, []);
 
-  if (loading) return <p>Loading stats...</p>;
+  if (loading) return <p className={styles.loadingState}>Loading stats...</p>;
   if (error)
     return (
       <div className={styles.errorContainer}>
         <p className={styles.error}>{error}</p>
         <button onClick={fetchStats} className={styles.retryButton}>
-          Retry
+          Try Again
         </button>
       </div>
     );
-  if (!stats) return <p>No statistics data available.</p>;
+  if (!stats) return <p className={styles.loadingState}>No statistics data available.</p>;
 
-  // Guard against empty genreDistribution
   const genreDistribution = Array.isArray(stats.genreDistribution)
     ? stats.genreDistribution
     : [];
 
   if (genreDistribution.length === 0) {
-    return <p>No genre distribution data available.</p>;
+    return <p className={styles.loadingState}>No genre distribution data available.</p>;
   }
 
-  // Pie chart for genre distribution
   const genreLabels = genreDistribution.map((g) => g._id);
   const genreCounts = genreDistribution.map((g) => g.count);
+
+  const chartColors = [
+    "#e8a838", "#7c6aef", "#3ecfb2", "#e8647c", "#f0c060",
+    "#6a9ef0", "#c084fc", "#34d399", "#f87171", "#fbbf24",
+  ];
 
   const pieData = {
     labels: genreLabels,
@@ -106,24 +111,13 @@ const StatsDashboard = () => {
       {
         label: "Genres Distribution",
         data: genreCounts,
-        backgroundColor: [
-          "#FF6384",
-          "#36A2EB",
-          "#FFCE56",
-          "#4BC0C0",
-          "#9966FF",
-          "#FF9F40",
-          "#8BC34A",
-          "#FF5722",
-          "#607D8B",
-          "#795548",
-        ],
-        borderWidth: 1,
+        backgroundColor: chartColors,
+        borderWidth: 0,
+        hoverOffset: 6,
       },
     ],
   };
 
-  // Bar chart for average ratings by genre (using overall average here)
   const averageRating = Number(stats.averageRating);
   const barData = {
     labels: ["Average Rating"],
@@ -131,18 +125,21 @@ const StatsDashboard = () => {
       {
         label: "Rating",
         data: [isNaN(averageRating) ? 0 : averageRating.toFixed(2)],
-        backgroundColor: "#36A2EB",
+        backgroundColor: "rgba(232, 168, 56, 0.3)",
+        borderColor: "#e8a838",
+        borderWidth: 1,
+        borderRadius: 8,
+        hoverBackgroundColor: "rgba(232, 168, 56, 0.5)",
       },
     ],
   };
 
-  // Guard line chart data
   const avgRuntimeByYear = Array.isArray(stats.averageRuntimeByYear)
     ? stats.averageRuntimeByYear
     : [];
 
   if (avgRuntimeByYear.length === 0) {
-    return <p>No average runtime data available.</p>;
+    return <p className={styles.loadingState}>No average runtime data available.</p>;
   }
 
   const lineLabels = avgRuntimeByYear.map((item) => item._id);
@@ -156,30 +153,58 @@ const StatsDashboard = () => {
       {
         label: "Average Runtime (minutes)",
         data: lineDataPoints,
-        fill: false,
-        borderColor: "#FF6384",
-        tension: 0.1,
+        fill: true,
+        backgroundColor: "rgba(124, 106, 239, 0.08)",
+        borderColor: "#7c6aef",
+        pointBackgroundColor: "#7c6aef",
+        pointBorderColor: "transparent",
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        tension: 0.4,
       },
     ],
   };
 
   return (
     <div className={styles.container}>
-      <h2>Movie Statistics Dashboard</h2>
+      <h2>Statistics</h2>
+      <p className={styles.dashSubtitle}>Overview of movie data insights</p>
       <div className={styles.charts}>
         <section className={styles.chart}>
-          <h3>Genres Distribution</h3>
-          <Pie data={pieData} />
+          <h3>Genre Distribution</h3>
+          <Pie
+            data={pieData}
+            options={{
+              plugins: {
+                legend: { position: "bottom", labels: { padding: 16, usePointStyle: true, pointStyleWidth: 8 } },
+              },
+            }}
+          />
         </section>
 
         <section className={styles.chart}>
           <h3>Average Movie Rating</h3>
-          <Bar data={barData} options={{ scales: { y: { min: 0, max: 10 } } }} />
+          <Bar
+            data={barData}
+            options={{
+              scales: { y: { min: 0, max: 10, grid: { color: "rgba(255,255,255,0.03)" } } },
+              plugins: { legend: { display: false } },
+            }}
+          />
         </section>
 
         <section className={styles.chart}>
           <h3>Average Runtime by Year</h3>
-          <Line data={lineData} />
+          <Line
+            data={lineData}
+            options={{
+              scales: {
+                x: { grid: { display: false } },
+                y: { grid: { color: "rgba(255,255,255,0.03)" } },
+              },
+              plugins: { legend: { display: false } },
+            }}
+          />
         </section>
       </div>
     </div>

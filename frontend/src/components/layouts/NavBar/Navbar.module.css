@@ -2,34 +2,115 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 24px;
-  background-color: #0077ff;
-  color: white;
+  padding: 0 clamp(20px, 4vw, 48px);
+  height: 64px;
+  background: rgba(5, 7, 16, 0.7);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  animation: fadeIn 0.5s ease;
+  /* 3D layered shadow beneath */
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.02),
+    0 4px 16px rgba(0,0,0,0.2),
+    0 12px 40px rgba(0,0,0,0.15);
 }
 
 .logo {
+  font-family: 'Playfair Display', serif;
   font-weight: 700;
   font-size: 1.5rem;
-  color: white;
   text-decoration: none;
+  color: var(--gold);
+  letter-spacing: -0.3px;
+  transition: var(--transition-smooth);
+  position: relative;
+  text-shadow: 0 0 20px rgba(232, 168, 56, 0.15);
+}
+
+.logo:hover {
+  color: var(--gold-light);
+  text-shadow: 0 0 30px rgba(232, 168, 56, 0.25);
+  transform: scale(1.04) translateZ(10px);
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .links a {
-  margin-left: 16px;
-  color: white;
+  color: var(--text-secondary);
   text-decoration: none;
   font-weight: 500;
+  font-size: 0.9rem;
+  padding: 7px 16px;
+  border-radius: var(--radius-xs);
+  transition: var(--transition-fast);
+  letter-spacing: 0.2px;
+  position: relative;
+}
+
+.links a:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-1px);
+}
+
+.links a::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 1px;
+  transition: all 0.3s var(--ease-out);
+  transform: translateX(-50%);
+  box-shadow: 0 0 8px var(--gold-glow);
+}
+
+.links a:hover::after {
+  width: 50%;
 }
 
 .logoutBtn {
-  margin-left: 16px;
-  background: none;
-  border: none;
-  color: white;
+  background: transparent;
+  border: 1px solid var(--danger-border);
+  color: var(--rose);
   font-weight: 500;
+  font-size: 0.9rem;
   cursor: pointer;
+  padding: 7px 16px;
+  border-radius: var(--radius-xs);
+  transition: var(--transition-fast);
+  font-family: inherit;
+  letter-spacing: 0.2px;
 }
 
 .logoutBtn:hover {
-  text-decoration: underline;
+  background: var(--danger-bg);
+  border-color: rgba(232, 100, 124, 0.35);
+  color: #f08090;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(232, 100, 124, 0.1);
+}
+
+.error {
+  color: var(--danger);
+  font-size: 0.82rem;
+  text-align: center;
+  padding: 6px 14px;
+  background: var(--danger-bg);
+  border-radius: var(--radius-xs);
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
 }

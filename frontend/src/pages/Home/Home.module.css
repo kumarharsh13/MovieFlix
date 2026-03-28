@@ -1,90 +1,219 @@
 .container {
-  padding: 2rem 1rem;
-  max-width: 1200px;
+  padding: 0 clamp(16px, 4vw, 48px) 5rem;
+  max-width: 1320px;
   margin: 0 auto;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-h1 {
-  font-size: 2rem;
+/* ======= Hero with 3D floating ======= */
+.hero {
   text-align: center;
-  margin-bottom: 1.5rem;
+  padding: 4.5rem 0 2.5rem;
+  animation: heroFloat 6s ease-in-out infinite;
+  position: relative;
 }
 
+/* Floating 3D orb behind hero */
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 168, 56, 0.06) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(40px);
+  pointer-events: none;
+  animation: breathe 4s ease infinite;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  margin-bottom: 14px;
+  position: relative;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.hero h1 .highlight {
+  color: var(--gold);
+  text-shadow: 0 0 40px rgba(232, 168, 56, 0.2);
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  font-weight: 400;
+  margin-bottom: 6px;
+  letter-spacing: 0.3px;
+}
+
+.divider {
+  width: 50px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 0 auto 24px;
+  opacity: 0.5;
+  border-radius: 1px;
+  box-shadow: 0 0 12px var(--gold-glow);
+}
+
+/* ======= Movies grid with 3D perspective ======= */
 .moviesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 4rem;
-  margin: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1.8rem;
+  margin-top: 2rem;
+  perspective: 1000px;
 }
 
+/* Stagger card animations */
+.moviesGrid > *:nth-child(1) { animation-delay: 0.02s; }
+.moviesGrid > *:nth-child(2) { animation-delay: 0.06s; }
+.moviesGrid > *:nth-child(3) { animation-delay: 0.1s; }
+.moviesGrid > *:nth-child(4) { animation-delay: 0.14s; }
+.moviesGrid > *:nth-child(5) { animation-delay: 0.18s; }
+.moviesGrid > *:nth-child(6) { animation-delay: 0.22s; }
+.moviesGrid > *:nth-child(7) { animation-delay: 0.26s; }
+.moviesGrid > *:nth-child(8) { animation-delay: 0.3s; }
+
+/* Error */
 .error {
-  color: #e74c3c;
-  font-weight: bold;
+  color: var(--danger);
+  font-weight: 500;
   text-align: center;
-  margin-top: 1rem;
+  margin-top: 2rem;
+  padding: 14px 20px;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
+  animation: scaleIn 0.3s var(--ease-out);
 }
 
+/* Loading */
+.loading {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  padding: 4rem 0;
+  animation: pulse 1.8s ease infinite;
+  letter-spacing: 0.5px;
+}
+
+/* Empty state */
+.emptyState {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 1rem;
+  padding: 5rem 1rem 3rem;
+  grid-column: 1 / -1;
+  letter-spacing: 0.3px;
+}
+
+/* ======= Genre filter pills ======= */
 .genreFilter {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+  animation: slideUp 0.4s var(--ease-out) 0.2s both;
 }
 
 .genreFilterLabel {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+  font-weight: 500;
+  font-size: 0.78rem;
+  margin-bottom: 10px;
   display: block;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
 }
 
 .genreButtons {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
 .genreButton {
-  padding: 6px 14px;
-  border-radius: 20px;
-  border: 1px solid #007bff;
-  background-color: white;
+  padding: 7px 16px;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-subtle);
+  background: transparent;
   cursor: pointer;
-  font-size: 0.9rem;
-  color: #007bff;
-  transition: all 0.2s ease;
+  font-size: 0.82rem;
+  font-family: inherit;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all 0.3s var(--ease-out);
   user-select: none;
 }
 
 .genreButton:hover {
-  background-color: #e6f0ff;
+  background: var(--bg-glass-hover);
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
 .genreButtonActive {
-  background-color: #007bff;
-  color: white;
+  background: var(--gold-soft);
+  color: var(--gold);
   font-weight: 600;
-  border-color: #007bff;
+  border-color: var(--border-accent);
+  box-shadow: 0 0 20px rgba(232, 168, 56, 0.06);
 }
 
+.genreButtonActive:hover {
+  background: rgba(232, 168, 56, 0.12);
+  color: var(--gold-light);
+}
+
+/* ======= Pagination ======= */
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
-  margin-top: 2rem;
+  gap: 16px;
+  margin-top: 3.5rem;
+  animation: fadeIn 0.5s var(--ease-out);
+  perspective: 400px;
 }
 
 .pagination button {
-  padding: 0.5rem 1rem;
-  background-color: #0077ff;
-  border: none;
-  color: white;
-  font-weight: bold;
-  border-radius: 4px;
+  padding: 10px 24px;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-family: inherit;
+  font-size: 0.88rem;
+  border-radius: var(--radius-sm);
   cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+  letter-spacing: 0.3px;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: var(--gold-soft);
+  border-color: var(--border-accent);
+  color: var(--gold);
+  transform: translateY(-2px) translateZ(5px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2), 0 0 20px rgba(232, 168, 56, 0.05);
 }
 
 .pagination button:disabled {
-  background-color: #ccc;
+  opacity: 0.2;
   cursor: not-allowed;
 }
 
+.pagination span {
+  color: var(--text-muted);
+  font-weight: 400;
+  font-size: 0.88rem;
+  letter-spacing: 0.5px;
+}

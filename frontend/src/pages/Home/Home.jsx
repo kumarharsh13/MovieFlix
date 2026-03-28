@@ -113,13 +113,20 @@ const Home = () => {
 
   return (
     <div className={styles.container}>
-      <h1>Search Movies</h1>
-
-      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <div className={styles.hero}>
+        <h1>
+          Discover <span className={styles.highlight}>Movies</span>
+        </h1>
+        <p className={styles.subtitle}>
+          Explore thousands of films, ratings, and more
+        </p>
+        <div className={styles.divider} />
+        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      </div>
 
       {genres.length > 0 && (
         <div className={styles.genreFilter}>
-          <label className={styles.genreFilterLabel}>Filter by Genres:</label>
+          <label className={styles.genreFilterLabel}>Filter by Genre</label>
           <div className={styles.genreButtons}>
             {genres.map((genre) => (
               <button
@@ -138,14 +145,16 @@ const Home = () => {
         </div>
       )}
 
-      {loading && <p>Loading...</p>}
+      {loading && <p className={styles.loading}>Searching...</p>}
       {error && <p className={styles.error}>{error}</p>}
 
       <div className={styles.moviesGrid}>
-        {!loading && movies.length === 0 && !error && (
-          <p>No movies found.</p>
+        {!loading && movies.length === 0 && !error && searchTerm && (
+          <p className={styles.emptyState}>
+            No movies found. Try a different search.
+          </p>
         )}
-        {movies.map((movie) => (
+        {movies.map((movie, index) => (
           <MovieCard key={movie._id || movie.imdbID} movie={movie} />
         ))}
       </div>
@@ -153,16 +162,16 @@ const Home = () => {
       {movies.length > 0 && (
         <div className={styles.pagination}>
           <button onClick={() => goToPage(page - 1)} disabled={page === 1}>
-            ⬅️ Prev
+            Prev
           </button>
           <span>
-            Page {page} of {totalPages}
+            {page} / {totalPages}
           </span>
           <button
             onClick={() => goToPage(page + 1)}
             disabled={page === totalPages}
           >
-            Next ➡️
+            Next
           </button>
         </div>
       )}

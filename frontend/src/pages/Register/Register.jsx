@@ -18,7 +18,7 @@ const Register = () => {
   };
 
   const handleChange = (e) => {
-    setError(''); // Clear error on input change
+    setError('');
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -35,10 +35,8 @@ const Register = () => {
     setError('');
     try {
       await registerUser(form);
-      // Optionally: show success message here before redirect
       navigate('/login');
     } catch (err) {
-      // Handle API error responses or fallback
       if (err.response && err.response.data) {
         setError(err.response.data.message || 'Registration failed');
       } else if (err.message) {
@@ -52,36 +50,45 @@ const Register = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <form onSubmit={handleSubmit} className={styles.form} noValidate>
-        <h2>Register</h2>
-        {error && <p className={styles.error}>{error}</p>}
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          value={form.email}
-          required
-          disabled={loading}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          value={form.password}
-          required
-          disabled={loading}
-          minLength={6}
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? 'Registering...' : 'Register'}
-        </button>
-        <div className={styles.loginLink}>
-          Already have an account? <Link to="/login">Login</Link>
-        </div>
-      </form>
+    <div className={styles.wrapper}>
+      <div className={styles.container}>
+        <form onSubmit={handleSubmit} className={styles.form} noValidate>
+          <h2>Create account</h2>
+          <p className={styles.formSubtitle}>Join MovieFlix today</p>
+          {error && <p className={styles.error}>{error}</p>}
+          <div className={styles.inputGroup}>
+            <label className={styles.inputLabel}>Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              onChange={handleChange}
+              value={form.email}
+              required
+              disabled={loading}
+            />
+          </div>
+          <div className={styles.inputGroup}>
+            <label className={styles.inputLabel}>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Min. 6 characters"
+              onChange={handleChange}
+              value={form.password}
+              required
+              disabled={loading}
+              minLength={6}
+            />
+          </div>
+          <button type="submit" disabled={loading}>
+            {loading ? 'Creating...' : 'Create Account'}
+          </button>
+          <div className={styles.loginLink}>
+            Already have an account? <Link to="/login">Sign in</Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

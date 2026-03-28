@@ -1,42 +1,269 @@
 .container {
-  padding: 1rem;
-  max-width: 900px;
+  padding: 2.5rem clamp(16px, 4vw, 48px);
+  max-width: 1000px;
   margin: 0 auto;
+  animation: fadeIn 0.5s var(--ease-out);
+}
+
+.title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+  line-height: 1.2;
+  animation: slideUp 0.6s var(--ease-out);
+  text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.year {
+  color: var(--text-muted);
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+  animation: slideUp 0.6s var(--ease-out) 0.05s both;
 }
 
 .content {
-  display: flex;
-  gap: 2rem;
-  margin-top: 1rem;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 3rem;
+  margin-top: 0.5rem;
+  perspective: 800px;
+}
+
+@media (max-width: 768px) {
+  .content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* ======= 3D Poster ======= */
+.posterWrap {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  animation: slideInLeft 0.8s var(--ease-out);
+  transform-style: preserve-3d;
+  transition: transform 0.5s var(--ease-out);
+
+  /* Layered 3D shadow */
+  box-shadow:
+    0 4px 8px rgba(0,0,0,0.3),
+    0 16px 32px rgba(0,0,0,0.25),
+    0 32px 64px rgba(0,0,0,0.2),
+    -8px 0 30px rgba(0,0,0,0.15);
+}
+
+.posterWrap:hover {
+  transform: perspective(600px) rotateY(-5deg) rotateX(2deg) scale(1.02);
+  box-shadow:
+    0 8px 16px rgba(0,0,0,0.3),
+    0 24px 48px rgba(0,0,0,0.25),
+    0 48px 80px rgba(0,0,0,0.2),
+    -12px 0 40px rgba(0,0,0,0.15),
+    0 0 60px rgba(232, 168, 56, 0.04);
+}
+
+/* Shine sweep on poster hover */
+.posterWrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.05) 45%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 55%,
+    transparent 60%
+  );
+  transform: translateX(-100%) skewX(-15deg);
+  pointer-events: none;
+  transition: none;
+  z-index: 2;
+}
+
+.posterWrap:hover::after {
+  animation: shimmerSweep 0.7s ease-out forwards;
 }
 
 .poster {
-  max-width: 300px;
   width: 100%;
-  border-radius: 6px;
+  display: block;
+  border-radius: var(--radius-md);
+  transition: var(--transition-slow);
 }
 
+.posterWrap:hover .poster {
+  filter: brightness(1.05) saturate(1.1);
+}
+
+/* ======= Details with 3D slide-in ======= */
 .details {
-  flex: 1;
-  min-width: 250px;
+  animation: slideInRight 0.8s var(--ease-out);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transform-style: preserve-3d;
 }
 
-.details p {
-  margin: 0.5rem 0;
+.detailRow {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: all 0.3s var(--ease-out);
+  border-radius: var(--radius-xs);
+  position: relative;
+}
+
+.detailRow:last-child {
+  border-bottom: none;
+}
+
+.detailRow:hover {
+  padding-left: 22px;
+  background: var(--bg-glass);
+  border-color: var(--border-hover);
+  transform: translateZ(8px) translateX(4px);
+  box-shadow: -4px 0 0 var(--gold), 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.detailLabel {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.detailValue {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.detailValue.plot {
+  line-height: 1.7;
+}
+
+.ratingValue {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-shadow: 0 0 12px var(--gold-glow);
+}
+
+.ratingValue .star {
+  font-size: 0.85rem;
+}
+
+.imdbLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 10px 20px;
+  background: var(--gold-soft);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-xs);
+  transition: all 0.3s var(--ease-out);
+  margin-top: 12px;
+  /* 3D raised */
+  box-shadow: 0 2px 0 rgba(184, 125, 26, 0.3), 0 4px 12px rgba(232, 168, 56, 0.08);
+}
+
+.imdbLink:hover {
+  background: rgba(232, 168, 56, 0.15);
+  transform: translateY(-2px) translateZ(6px);
+  box-shadow: 0 4px 0 rgba(184, 125, 26, 0.3), 0 8px 24px rgba(232, 168, 56, 0.12);
 }
 
 .backLink {
-  display: inline-block;
-  margin-top: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2.5rem;
   text-decoration: none;
-  color: #007bff;
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.88rem;
+  transition: all 0.3s var(--ease-out);
+  letter-spacing: 0.3px;
 }
 
 .backLink:hover {
-  text-decoration: underline;
+  color: var(--gold);
+  transform: translateX(-6px);
+}
+
+.backLink .arrow {
+  display: inline-block;
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.backLink:hover .arrow {
+  transform: translateX(-6px);
+}
+
+/* Loading & Error */
+.loadingState {
+  text-align: center;
+  padding: 6rem 2rem;
+  color: var(--text-muted);
+  animation: pulse 1.8s ease infinite;
+  font-size: 0.95rem;
+}
+
+.errorContainer {
+  text-align: center;
+  padding: 6rem 2rem;
+  animation: fadeInUp 0.5s var(--ease-out);
 }
 
 .error {
-  color: red;
+  color: var(--danger);
+  font-weight: 500;
+  font-size: 1rem;
+  margin-bottom: 24px;
+  padding: 14px 20px;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  border-radius: var(--radius-sm);
+  display: inline-block;
+}
+
+.retryButton {
+  padding: 11px 26px;
+  background: linear-gradient(135deg, var(--gold), #d49520);
+  color: var(--bg-deep);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.92rem;
+  font-family: inherit;
+  font-weight: 700;
+  transition: all 0.3s var(--ease-out);
+  box-shadow:
+    0 2px 0 #b87d1a,
+    0 4px 12px rgba(232, 168, 56, 0.15);
+}
+
+.retryButton:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 0 #b87d1a,
+    0 8px 24px rgba(232, 168, 56, 0.2);
 }
