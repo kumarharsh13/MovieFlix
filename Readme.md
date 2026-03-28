@@ -13,10 +13,13 @@ A full-stack movie search and statistics dashboard application built with the **
 - 🔐 **Authentication with JWT**
 - 🧑‍💼 **Admin-only Stats Access**
 - 🧠 **Smart Caching** (24-hour cache in MongoDB)
+
 ---
+
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - React
 - React Router
 - Axios
@@ -24,6 +27,7 @@ A full-stack movie search and statistics dashboard application built with the **
 - CSS Modules
 
 ### Backend
+
 - Node.js
 - Express.js
 - MongoDB (Mongoose)
@@ -32,24 +36,23 @@ A full-stack movie search and statistics dashboard application built with the **
 - bcrypt.js
 
 ---
-### To setup Project. Please check the readme in frontend and backend folder respectively.  
+
+### To setup Project. Please check the readme in frontend and backend folder respectively.
 
 From here just clone or download the zip.
 
 ---
 
 ### Screenshot
+
 - Register Page:
-    <img src="screenshots/resgister.png" alt="register">
+  <img src="screenshots/resgister.png" alt="register">
 - Login Page:
-    <img src="screenshots/login.png" alt="login">
+  <img src="screenshots/login.png" alt="login">
 - Home Page:
-        <img src="screenshots/homepage.png" alt="homepage">
+  <img src="screenshots/homepage.png" alt="homepage">
 - Moive List:
-        <img src="screenshots/movie1.png" alt="movie1">
-        <img src="screenshots/movie2.png" alt="movie2">
+  <img src="screenshots/movie1.png" alt="movie1">
+  <img src="screenshots/movie2.png" alt="movie2">
 - Moive Detail:
-    <img src="screenshots/movie_detail.png" alt="detail">
-- Dashboard:
-    <img src="screenshots/dashboard.png" alt="dashboard">
-    <img src="screenshots/dashboard2.png" alt="dashboard">
+  <img src="screenshots/movie_detail.png" alt="detail">
